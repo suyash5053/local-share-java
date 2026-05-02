@@ -1,4 +1,7 @@
-package com.localshare.common.exceptions;
+package com.localshare.common.exception;
 
-public class DeviceNotFoundException {
+public class DeviceNotFoundException extends  RuntimeException{
+    public DeviceNotFoundException(String message) {
+        super(message);
+    }
 }

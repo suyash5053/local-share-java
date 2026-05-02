@@ -1,4 +1,7 @@
-package com.localshare.common.exceptions;
+package com.localshare.common.exception;
 
-public class InvalidTokenException {
+public class InvalidTokenException extends RuntimeException {
+    public InvalidTokenException(String message) {
+        super(message);
+    }
 }

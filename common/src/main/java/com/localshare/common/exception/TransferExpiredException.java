@@ -1,4 +1,4 @@
-package com.localshare.common.exceptions;
+package com.localshare.common.exception;
 
 public class TransferExpiredException extends RuntimeException {
     public  TransferExpiredException(String message) {

@@ -1,4 +1,7 @@
-package com.localshare.common.exceptions;
+package com.localshare.common.exception;
 
-public class FileSizeLimitExceededException {
+public class FileSizeLimitExceededException extends RuntimeException {
+    public FileSizeLimitExceededException(String message) {
+        super(message);
+    }
 }
