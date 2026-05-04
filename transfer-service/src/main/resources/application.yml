@@ -9,5 +9,5 @@ transfer:
   save-directory: ./received-files
   max-file-size: 1073741824
 
-handshake-service:
-  port: 8081
+handshake:
+  service-url: http://localhost:8081
