@@ -1,6 +1,10 @@
 spring:
   application:
     name: transfer-service
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
 
 server:
   port: 8082
