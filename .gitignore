@@ -26,6 +26,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+data/
+*.mv.db
+*.trace.db
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

@@ -5,7 +5,7 @@ import com.localshare.common.enums.TransferStatus;
 
 import java.time.LocalDateTime;
 
-public record HistoryProgressDTO(
+public record HistoryRecordDTO(
         Long id,
         String transferId,
         String fileName,
