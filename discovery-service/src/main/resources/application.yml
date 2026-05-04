@@ -4,3 +4,8 @@ spring:
 
 server:
   port: 8084
+
+discovery:
+  service-type: _localshare._tcp.local.
+  device-name: My Device
+  device-type: DESKTOP
