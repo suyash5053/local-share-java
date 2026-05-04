@@ -2,6 +2,7 @@ package com.localshare.handshake.service;
 
 import com.localshare.common.dto.TransferRequestDTO;
 import com.localshare.common.dto.TransferResponseDTO;
+import com.localshare.common.dto.ValidateTokenRequestDTO;
 import com.localshare.common.enums.TransferStatus;
 import com.localshare.common.exception.TransferNotFoundException;
 import com.localshare.handshake.model.PendingRequest;
@@ -69,5 +70,19 @@ public class HandshakeService {
         pendingRequests.entrySet().removeIf(entry ->
                 LocalDateTime.now().minusSeconds(30).isAfter(entry.getValue().getCreatedAt())
         );
+    }
+
+    public boolean validateToken(ValidateTokenRequestDTO validateTokenRequest) {
+        PendingRequest pending = pendingRequests.get(validateTokenRequest.transferId());
+
+        if (pending == null) {
+            return false;
+        }
+
+        boolean isValid = validateTokenRequest.token().equals(pending.getToken());
+        if (isValid) {
+            pendingRequests.remove(validateTokenRequest.transferId());
+        }
+        return isValid;
     }
 }

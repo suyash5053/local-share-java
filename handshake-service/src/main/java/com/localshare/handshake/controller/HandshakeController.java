@@ -4,6 +4,7 @@ import com.localshare.common.constants.ApiPaths;
 import com.localshare.common.dto.TransferRequestDTO;
 import com.localshare.common.dto.TransferResponseDTO;
 import com.localshare.handshake.dto.HandshakeRespondRequest;
+import com.localshare.common.dto.ValidateTokenRequestDTO;
 import com.localshare.handshake.service.HandshakeService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,10 @@ public class HandshakeController {
     @PostMapping("/respond/{transferId}")
     public TransferResponseDTO respondToRequest(@PathVariable String transferId, @RequestBody HandshakeRespondRequest handshakeRespondRequest) {
         return handshakeService.respondToRequest(transferId, handshakeRespondRequest.accepted());
+    }
+
+    @PostMapping("/validate")
+    public boolean validateRequest(@Valid @RequestBody ValidateTokenRequestDTO validateTokenRequest) {
+        return handshakeService.validateToken(validateTokenRequest);
     }
 }
