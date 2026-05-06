@@ -1,7 +1,9 @@
 package com.localshare.transfer.service;
 
+import com.localshare.common.dto.HistoryRecordDTO;
 import com.localshare.common.dto.TransferProgressDTO;
 import com.localshare.common.dto.ValidateTokenRequestDTO;
+import com.localshare.common.enums.TransferDirection;
 import com.localshare.common.enums.TransferStatus;
 import com.localshare.common.exception.FileSizeLimitExceededException;
 import com.localshare.common.exception.InvalidTokenException;
@@ -20,14 +22,17 @@ import java.util.Objects;
 public class TransferService {
     private final HandshakeClient handshakeClient;
     private final TransferProperties transferProperties;
+    private final HistoryClient historyClient;
+    private final NotificationClient notificationClient;
 
-    public TransferService(HandshakeClient handshakeClient, TransferProperties transferProperties) {
+    public TransferService(HandshakeClient handshakeClient, TransferProperties transferProperties, HistoryClient historyClient, NotificationClient notificationClient) {
         this.handshakeClient = handshakeClient;
         this.transferProperties = transferProperties;
+        this.historyClient = historyClient;
+        this.notificationClient = notificationClient;
     }
 
-    public TransferProgressDTO sendFile(MultipartFile file, ValidateTokenRequestDTO validateTokenRequest) {
-
+    public TransferProgressDTO sendFile(MultipartFile file, ValidateTokenRequestDTO validateTokenRequest, String senderDeviceName) {
         boolean validation = handshakeClient.validateToken(validateTokenRequest);
         if (!validation) {
             throw new InvalidTokenException("Your request can not be validated");
@@ -38,7 +43,6 @@ public class TransferService {
         }
 
         String safeFileName = Paths.get(Objects.requireNonNull(file.getOriginalFilename())).getFileName().toString();
-
         try {
             Path saveDir = Paths.get(transferProperties.getSaveDirectory());
             Files.createDirectories(saveDir);
@@ -47,7 +51,7 @@ public class TransferService {
 
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-            return new TransferProgressDTO(
+            TransferProgressDTO result = new TransferProgressDTO(
                     validateTokenRequest.transferId(),
                     file.getSize(),
                     file.getSize(),
@@ -56,6 +60,22 @@ public class TransferService {
                     TransferStatus.COMPLETED
             );
 
+            historyClient.saveRecord(new HistoryRecordDTO(
+                            null,
+                            validateTokenRequest.transferId(),
+                            safeFileName,
+                            file.getSize(),
+                            senderDeviceName,
+                            "This Device",
+                            TransferStatus.COMPLETED,
+                            TransferDirection.RECEIVED,
+                            null
+                    )
+            );
+
+            notificationClient.notifyTransferStatus(result);
+
+            return result;
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to save file: " + e.getMessage());

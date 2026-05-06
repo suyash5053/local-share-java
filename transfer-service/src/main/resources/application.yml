@@ -15,3 +15,9 @@ transfer:
 
 handshake:
   service-url: http://localhost:8081
+
+history:
+  service-url: http://localhost:8083
+
+notification:
+  service-url: http://localhost:8085

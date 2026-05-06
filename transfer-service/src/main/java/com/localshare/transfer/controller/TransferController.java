@@ -17,10 +17,10 @@ public class TransferController {
     }
 
     @PostMapping("/send")
-    public TransferProgressDTO sendFile(@RequestParam String transferId, @RequestParam String token, @RequestParam MultipartFile file) {
+    public TransferProgressDTO sendFile(@RequestParam String transferId, @RequestParam String token, @RequestParam MultipartFile file, @RequestParam String senderDeviceName) {
         ValidateTokenRequestDTO validateTokenRequest = new ValidateTokenRequestDTO(
                 transferId, token
         );
-        return transferService.sendFile(file, validateTokenRequest);
+        return transferService.sendFile(file, validateTokenRequest,  senderDeviceName);
     }
 }
