@@ -1,6 +1,7 @@
 package com.localshare.transfer.service;
 
 import com.localshare.common.dto.ValidateTokenRequestDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -8,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class HandshakeClient {
     private final WebClient webClient;
 
-    public HandshakeClient(WebClient webClient) {
+    public HandshakeClient(@Qualifier("handshakeWebClient") WebClient webClient) {
         this.webClient = webClient;
     }
 
