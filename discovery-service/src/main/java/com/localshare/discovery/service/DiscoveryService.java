@@ -85,7 +85,6 @@ public class DiscoveryService {
             });
         } catch (IOException e) {
             log.error("Failed to start discovery", e);
-            throw new RuntimeException("Failed to start discovery" + e.getMessage());
         }
     }
 
@@ -96,7 +95,6 @@ public class DiscoveryService {
             jmDNS.close();
         } catch (IOException e) {
             log.error("Failed to stop discovery", e);
-            throw new RuntimeException("Failed to stop discovery" + e.getMessage());
         }
     }
 

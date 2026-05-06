@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: transfer-service
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+
+server:
+  port: 8082
+
+transfer:
+  save-directory: ./received-files
+  max-file-size: 1073741824
+
+handshake:
+  service-url: http://handshake-service:8081
+
+history:
+  service-url: http://history-service:8083
+
+notification:
+  service-url: http://notification-service:8085
