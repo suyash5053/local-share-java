@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  handshake-service:
+    build:
+      context: ./handshake-service
+    ports:
+      - "8081:8081"
+    networks:
+      - localshare-network
+  transfer-service:
+    build:
+      context: ./transfer-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - handshake-service
+      - history-service
+      - notification-service
+    networks:
+      - localshare-network
+    volumes:
+      - ./received-files:/app/received-files
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  history-service:
+    build:
+      context: ./history-service
+    ports:
+      - "8083:8083"
+    networks:
+      - localshare-network
+    volumes:
+      - ./data:/app/data
+
+  discovery-service:
+    build:
+      context: ./discovery-service
+    ports:
+      - "8084:8084"
+    networks:
+      - localshare-network
+
+  notification-service:
+    build:
+      context: ./notification-service
+    ports:
+      - "8085:8085"
+    networks:
+      - localshare-network
+
+  gateway-service:
+    build:
+      context: ./gateway-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - handshake-service
+      - history-service
+      - transfer-service
+      - discovery-service
+      - notification-service
+    networks:
+      - localshare-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+networks:
+  localshare-network:
+    driver: bridge
